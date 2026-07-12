@@ -1,5 +1,5 @@
 #separator:Semicolon
-#html:false
+#html:true
 #notetype:Basic
 #deck:Deep Learning::Neural Networks and Deep Learning
 #tags column:3
