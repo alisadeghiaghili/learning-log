@@ -7,11 +7,11 @@
 ---
 
 ## Status
-- W1 / Neural Networks and Deep Learning — NOT STARTED
+- W1 / Neural Networks and Deep Learning — IN PROGRESS
 - W2 / Improving Deep Neural Networks — NOT STARTED
 - W3 / Structuring Machine Learning Projects — NOT STARTED
 - W4 / Convolutional Neural Networks — NOT STARTED
 - W5 / Sequence Models — NOT STARTED
 
-**Last covered:** —  
+**Last covered:** W1 - Intro video (motivation & overview)  
 **Needs Review:** 0 cards
