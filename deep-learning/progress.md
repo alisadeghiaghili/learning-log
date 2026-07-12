@@ -13,5 +13,5 @@
 - W4 / Convolutional Neural Networks — NOT STARTED
 - W5 / Sequence Models — NOT STARTED
 
-**Last covered:** W1 - Intro video (motivation & overview)  
+**Last covered:** W1 - Supervised Learning with Neural Networks (100%)  
 **Needs Review:** 0 cards
