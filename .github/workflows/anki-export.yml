@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "deep-learning/flashcards.md"
+      - "deep-learning/progress.md"
     branches:
       - main
   workflow_dispatch:
@@ -22,49 +23,90 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Generate Anki txt files with section tags
+      - name: Generate Anki txt files with 3-column format (Front;Back;Tags)
         run: |
           python3 << 'EOF'
           import re
 
+          # ─── Read metadata from progress.md ───────────────────────────────────
+          domain_tag = 'deep_learning'
+          course_tag = 'unknown_course'
+
+          try:
+              with open('deep-learning/progress.md', 'r', encoding='utf-8') as pf:
+                  for line in pf:
+                      # Match: **Course:** Neural Networks and Deep Learning
+                      m = re.match(r'\*{0,2}Course:\*{0,2}\s*(.+)', line.strip())
+                      if m:
+                          raw_course = m.group(1).strip().rstrip('*').strip()
+                          course_tag = re.sub(r'[^\w\u0600-\u06FF]+', '_', raw_course).strip('_').lower()
+                          break
+          except FileNotFoundError:
+              pass
+
+          # ─── Read flashcards.md ────────────────────────────────────────────────
           with open('deep-learning/flashcards.md', 'r', encoding='utf-8') as f:
               lines = f.readlines()
 
           main_cards = []
           review_cards = []
-          current_section = 'General'
+          current_section_tag = 'general'
           in_needs_review = False
 
           for line in lines:
               stripped = line.strip()
-              # detect section headings (## ...)
+
+              # Detect section headings (## ...)
               if stripped.startswith('## '):
                   heading = stripped[3:].strip()
                   if heading.lower().startswith('needs review'):
                       in_needs_review = True
                   else:
                       in_needs_review = False
-                      # slugify: keep alphanumeric, replace spaces/special with -
-                      current_section = re.sub(r'[^\w\u0600-\u06FF]+', '-', heading).strip('-')
+                      current_section_tag = re.sub(r'[^\w\u0600-\u06FF]+', '_', heading).strip('_').lower()
                   continue
-              # skip non-card lines
+
+              # Skip non-card lines
               if ';' not in stripped:
                   continue
               if stripped.startswith('#') or stripped.startswith('<!--') or stripped.startswith('---'):
                   continue
-              card = f"[{current_section}] {stripped}"
+
+              # Split into front ; back (only first semicolon)
+              parts = stripped.split(';', 1)
+              if len(parts) != 2:
+                  continue
+              front = parts[0].strip()
+              back = parts[1].strip()
+
+              tags = f"domain::{domain_tag} course::{course_tag} section::{current_section_tag}"
+              row = f"{front} ; {back} ; {tags}"
+
               if in_needs_review:
-                  review_cards.append(card)
+                  review_cards.append(row)
               else:
-                  main_cards.append(card)
+                  main_cards.append(row)
+
+          # ─── Anki import headers ───────────────────────────────────────────────
+          anki_header = (
+              "#separator:Semicolon\n"
+              "#html:false\n"
+              "#notetype:Basic\n"
+              f"#deck:Deep Learning::{raw_course if 'raw_course' in dir() else 'Course'}\n"
+              "#tags column:3\n"
+              "#columns:Front;Back;Tags\n"
+          )
 
           with open('deep-learning/flashcards_anki.txt', 'w', encoding='utf-8') as f:
+              f.write(anki_header)
               f.write('\n'.join(main_cards) + '\n')
 
           with open('deep-learning/flashcards_needs_review_anki.txt', 'w', encoding='utf-8') as f:
+              f.write(anki_header)
               f.write('\n'.join(review_cards) + '\n')
 
-          print(f'Main cards: {len(main_cards)}')
+          print(f'Course tag  : {course_tag}')
+          print(f'Main cards  : {len(main_cards)}')
           print(f'Review cards: {len(review_cards)}')
           EOF
 
