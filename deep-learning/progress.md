@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Course:** Deep Learning Specialization  
+**Course:** Neural Networks and Deep Learning  
 **Platform:** Coursera  
 **Domain:** Deep Learning, Neural Networks  
 
