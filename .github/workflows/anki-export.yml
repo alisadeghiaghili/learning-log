@@ -6,6 +6,7 @@ on:
       - "deep-learning/flashcards.md"
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-anki-files:
@@ -20,7 +21,6 @@ jobs:
           awk '
             BEGIN { in_needs_review = 0 }
             /^## Needs Review/ { in_needs_review = 1 }
-            # فقط کارت‌ها خارج از Needs Review
             /;/ && !in_needs_review && $0 !~ /^#/ && $0 !~ /^<!--/ && $0 !~ /^---/ {
               print $0
             }
@@ -31,7 +31,6 @@ jobs:
           awk '
             BEGIN { in_needs_review = 0 }
             /^## Needs Review/ { in_needs_review = 1; next }
-            # فقط کارت‌ها داخل Needs Review
             /;/ && in_needs_review && $0 !~ /^#/ && $0 !~ /^<!--/ && $0 !~ /^---/ {
               print $0
             }
@@ -39,12 +38,12 @@ jobs:
 
       - name: Commit changes
         run: |
-          if git diff --quiet; then
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add deep-learning/flashcards_anki.txt deep-learning/flashcards_needs_review_anki.txt
+            git commit -m "Update Anki exports from flashcards.md"
+            git push
+          else
             echo "No changes in Anki export files"
-            exit 0
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add deep-learning/flashcards_anki.txt deep-learning/flashcards_needs_review_anki.txt
-          git commit -m "Update Anki exports from flashcards.md"
-          git push
