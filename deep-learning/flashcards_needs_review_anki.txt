@@ -1,1 +1,7 @@
+#separator:Semicolon
+#html:false
+#notetype:Basic
+#deck:Deep Learning::Neural Networks and Deep Learning
+#tags column:3
+#columns:Front;Back;Tags
 
