@@ -23,19 +23,25 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Generate Anki txt files with 3-column format (Front;Back;Tags)
+      - name: Generate Anki txt files with RTL HTML support
         run: |
           python3 << 'EOF'
           import re
 
+          def wrap_rtl(text):
+              """Wrap text in a bilingual-safe RTL div."""
+              # Escape any existing HTML special chars to be safe in html:true mode
+              text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+              return f'<div dir="rtl" style="text-align:right;font-family:Tahoma,Arial,sans-serif">{text}</div>'
+
           # ─── Read metadata from progress.md ───────────────────────────────────
           domain_tag = 'deep_learning'
           course_tag = 'unknown_course'
+          raw_course = 'Course'
 
           try:
               with open('deep-learning/progress.md', 'r', encoding='utf-8') as pf:
                   for line in pf:
-                      # Match: **Course:** Neural Networks and Deep Learning
                       m = re.match(r'\*{0,2}Course:\*{0,2}\s*(.+)', line.strip())
                       if m:
                           raw_course = m.group(1).strip().rstrip('*').strip()
@@ -56,7 +62,6 @@ jobs:
           for line in lines:
               stripped = line.strip()
 
-              # Detect section headings (## ...)
               if stripped.startswith('## '):
                   heading = stripped[3:].strip()
                   if heading.lower().startswith('needs review'):
@@ -66,21 +71,19 @@ jobs:
                       current_section_tag = re.sub(r'[^\w\u0600-\u06FF]+', '_', heading).strip('_').lower()
                   continue
 
-              # Skip non-card lines
               if ';' not in stripped:
                   continue
               if stripped.startswith('#') or stripped.startswith('<!--') or stripped.startswith('---'):
                   continue
 
-              # Split into front ; back (only first semicolon)
               parts = stripped.split(';', 1)
               if len(parts) != 2:
                   continue
-              front = parts[0].strip()
-              back = parts[1].strip()
 
-              tags = f"domain::{domain_tag} course::{course_tag} section::{current_section_tag}"
-              row = f"{front} ; {back} ; {tags}"
+              front = wrap_rtl(parts[0].strip())
+              back  = wrap_rtl(parts[1].strip())
+              tags  = f"domain::{domain_tag} course::{course_tag} section::{current_section_tag}"
+              row   = f"{front} ; {back} ; {tags}"
 
               if in_needs_review:
                   review_cards.append(row)
@@ -90,9 +93,9 @@ jobs:
           # ─── Anki import headers ───────────────────────────────────────────────
           anki_header = (
               "#separator:Semicolon\n"
-              "#html:false\n"
+              "#html:true\n"
               "#notetype:Basic\n"
-              f"#deck:Deep Learning::{raw_course if 'raw_course' in dir() else 'Course'}\n"
+              f"#deck:Deep Learning::{raw_course}\n"
               "#tags column:3\n"
               "#columns:Front;Back;Tags\n"
           )
