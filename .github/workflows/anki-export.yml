@@ -28,9 +28,9 @@ jobs:
           python3 << 'EOF'
           import re
 
+          SEP = '\t'  # Tab separator — never appears in HTML attributes or card text
+
           def wrap_rtl(text):
-              """Wrap text in a bilingual-safe RTL div."""
-              # Escape any existing HTML special chars to be safe in html:true mode
               text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
               return f'<div dir="rtl" style="text-align:right;font-family:Tahoma,Arial,sans-serif">{text}</div>'
 
@@ -83,21 +83,21 @@ jobs:
               front = wrap_rtl(parts[0].strip())
               back  = wrap_rtl(parts[1].strip())
               tags  = f"domain::{domain_tag} course::{course_tag} section::{current_section_tag}"
-              row   = f"{front} ; {back} ; {tags}"
+              row   = SEP.join([front, back, tags])
 
               if in_needs_review:
                   review_cards.append(row)
               else:
                   main_cards.append(row)
 
-          # ─── Anki import headers ───────────────────────────────────────────────
+          # ─── Anki import headers (Tab-separated) ──────────────────────────────
           anki_header = (
-              "#separator:Semicolon\n"
+              "#separator:tab\n"
               "#html:true\n"
               "#notetype:Basic\n"
               f"#deck:Deep Learning::{raw_course}\n"
               "#tags column:3\n"
-              "#columns:Front;Back;Tags\n"
+              "#columns:Front\tBack\tTags\n"
           )
 
           with open('deep-learning/flashcards_anki.txt', 'w', encoding='utf-8') as f:
