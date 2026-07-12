@@ -22,25 +22,51 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Generate main Anki txt (non-review cards)
+      - name: Generate Anki txt files with section tags
         run: |
-          awk '
-            BEGIN { in_needs_review = 0 }
-            /^## Needs Review/ { in_needs_review = 1 }
-            /;/ && !in_needs_review && $0 !~ /^#/ && $0 !~ /^<!--/ && $0 !~ /^---/ {
-              print $0
-            }
-          ' deep-learning/flashcards.md > deep-learning/flashcards_anki.txt
+          python3 << 'EOF'
+          import re
 
-      - name: Generate Needs Review Anki txt
-        run: |
-          awk '
-            BEGIN { in_needs_review = 0 }
-            /^## Needs Review/ { in_needs_review = 1; next }
-            /;/ && in_needs_review && $0 !~ /^#/ && $0 !~ /^<!--/ && $0 !~ /^---/ {
-              print $0
-            }
-          ' deep-learning/flashcards.md > deep-learning/flashcards_needs_review_anki.txt
+          with open('deep-learning/flashcards.md', 'r', encoding='utf-8') as f:
+              lines = f.readlines()
+
+          main_cards = []
+          review_cards = []
+          current_section = 'General'
+          in_needs_review = False
+
+          for line in lines:
+              stripped = line.strip()
+              # detect section headings (## ...)
+              if stripped.startswith('## '):
+                  heading = stripped[3:].strip()
+                  if heading.lower().startswith('needs review'):
+                      in_needs_review = True
+                  else:
+                      in_needs_review = False
+                      # slugify: keep alphanumeric, replace spaces/special with -
+                      current_section = re.sub(r'[^\w\u0600-\u06FF]+', '-', heading).strip('-')
+                  continue
+              # skip non-card lines
+              if ';' not in stripped:
+                  continue
+              if stripped.startswith('#') or stripped.startswith('<!--') or stripped.startswith('---'):
+                  continue
+              card = f"[{current_section}] {stripped}"
+              if in_needs_review:
+                  review_cards.append(card)
+              else:
+                  main_cards.append(card)
+
+          with open('deep-learning/flashcards_anki.txt', 'w', encoding='utf-8') as f:
+              f.write('\n'.join(main_cards) + '\n')
+
+          with open('deep-learning/flashcards_needs_review_anki.txt', 'w', encoding='utf-8') as f:
+              f.write('\n'.join(review_cards) + '\n')
+
+          print(f'Main cards: {len(main_cards)}')
+          print(f'Review cards: {len(review_cards)}')
+          EOF
 
       - name: Commit and push changes
         run: |
