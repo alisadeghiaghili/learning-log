@@ -8,10 +8,13 @@
 
 ## Status
 - W1 / Neural Networks and Deep Learning — IN PROGRESS
+  - W1-01 / What is a Neural Network? — DONE
+  - W1-02 / Supervised Learning with Neural Networks — DONE
+  - W1-03 / Why is Deep Learning Taking Off? (W1-04) — DONE (no test — `no test` command)
 - W2 / Improving Deep Neural Networks — NOT STARTED
 - W3 / Structuring Machine Learning Projects — NOT STARTED
 - W4 / Convolutional Neural Networks — NOT STARTED
 - W5 / Sequence Models — NOT STARTED
 
-**Last covered:** W1 - Supervised Learning with Neural Networks (100%)  
+**Last covered:** W1-04 — Why is Deep Learning Taking Off?  
 **Needs Review:** 0 cards

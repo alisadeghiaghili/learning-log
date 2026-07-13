@@ -32,5 +32,19 @@ Structured vs Unstructured data فرق اصلیشون چیه؟ ; Structured = ه
 
 ---
 
+## W1 — Why is Deep Learning Taking Off? (W1-04)
+
+[Deep Learning][Neural Networks and Deep Learning][W1-04-Why-is-Deep-Learning-taking-off] سه عامل اصلی رشد Deep Learning چیست؟ ; 1) داده‌ی بیشتر و برچسب‌دار، 2) محاسبات سریع‌تر و سخت‌افزارهایی مانند GPU، 3) نوآوری الگوریتمی و معماری.
+
+[Deep Learning][Neural Networks and Deep Learning][W1-04-Why-is-Deep-Learning-taking-off] m در notation این دوره چه معنایی دارد؟ ; تعداد training examples؛ در supervised learning معمولاً تعداد نمونه‌های labeled که هم x و هم y دارند.
+
+[Deep Learning][Neural Networks and Deep Learning][W1-04-Why-is-Deep-Learning-taking-off] چرا Sigmoid در شبکه‌های عمیق می‌تواند باعث vanishing gradient شود؟ ; در نواحی اشباع، مشتق Sigmoid نزدیک صفر می‌شود؛ در backpropagation ضرب پی‌درپی این گرادیان‌های کوچک، گرادیان لایه‌های ابتدایی را تقریباً صفر می‌کند.
+
+[Deep Learning][Neural Networks and Deep Learning][W1-04-Why-is-Deep-Learning-taking-off] مشتق ReLU در چه ناحیه‌هایی صفر و یک است؟ ; برای z < 0 برابر 0 و برای z > 0 برابر 1 است؛ در z = 0 مشتق معمولاً در پیاده‌سازی با یک convention تعیین می‌شود.
+
+[Deep Learning][Neural Networks and Deep Learning][W1-04-Why-is-Deep-Learning-taking-off] چرا سرعت محاسبات برای موفقیت Deep Learning مهم است؟ ; چرخه‌ی idea → code → experiment → result → iteration را کوتاه می‌کند، بنابراین می‌توان experiment و iteration بیشتری انجام داد و سریع‌تر به مدل مؤثر رسید.
+
+---
+
 ## Needs Review
 <!-- Wrong answers from periodic quizzes go here -->
