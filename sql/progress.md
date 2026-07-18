@@ -3,7 +3,7 @@
 ## Chapters
 
 - [x] Ch 1: Query Fundamentals & Joins
-- [ ] Ch 2: Indexing & Query Execution Plans
+- [x] Ch 2: Indexing & Query Execution Plans
 - [ ] Ch 3: SQL Antipatterns & Better Designs
 - [ ] Ch 4: Window Functions & Advanced Queries
 - [ ] Ch 5: Storage Engines & Data Structures
