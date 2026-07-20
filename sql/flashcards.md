@@ -36,7 +36,7 @@ When is a Merge Join used? ; When both inputs are already sorted (e.g., from an 
 
 What is a Correlated Subquery? ; A subquery that references the outer query — executes once per row. Usually slow unless there's an index on the filter column.
 
-What's the difference between EXISTS and IN? ; EXISTS is correlated and compact (first match suffices) and NULL-safe. IN materializes the full subquery result and has weird behavior with NULLs. EXISTS is always safer and usually faster.
+What's the difference between EXISTS and IN? ; EXISTS short-circuits on first match and is NULL-safe — critical for NOT EXISTS vs NOT IN. IN materializes the subquery result; with NULLs in the list, NOT IN silently returns nothing. For positive IN vs EXISTS, modern optimizers often produce equivalent plans — use EXPLAIN to confirm. Prefer NOT EXISTS over NOT IN on nullable columns.
 
 Why does `NOT IN (1, 2, NULL)` never return anything? ; Because it's equivalent to x!=1 AND x!=2 AND x!=NULL. x!=NULL is always UNKNOWN, so the whole AND becomes UNKNOWN → row is filtered out. Use NOT EXISTS instead.
 
@@ -68,7 +68,7 @@ Does SQL work on Sets or Bags? ; Bag (multiset). SQL tables can have duplicate r
 
 Why is SELECT * bad in production? ; 1) Extra data (bandwidth, memory), 2) App breaks if schema changes, 3) Covering index won't work, 4) Query intent is unclear.
 
-What's the difference between DELETE vs TRUNCATE vs DROP? ; DELETE = remove specific rows (with WHERE), slow, triggers fire. TRUNCATE = remove all rows, fast, triggers don't fire. DROP = remove the entire table and its schema.
+What's the difference between DELETE vs TRUNCATE vs DROP? ; DELETE = remove specific rows (slow, row-level triggers fire, always rollbackable). TRUNCATE = remove all rows fast — row-level triggers don't fire, but PostgreSQL fires statement-level TRUNCATE triggers. DROP = remove table + schema entirely.
 
 ---
 
@@ -94,7 +94,7 @@ What is a covering index? ; An index containing all columns a query needs, so th
 
 ## Ch 2 — Index Types
 
-What's the difference between a clustered and non-clustered index? ; Clustered index determines physical row order on disk — only one per table (usually the PK). Non-clustered index is a separate structure with pointers to rows. Non-clustered lookups need an extra step to fetch the full row.
+What's the difference between a clustered and non-clustered index? ; Clustered index controls data row ordering — in MySQL/InnoDB and SQL Server, one per table (usually PK). PostgreSQL has no persistent clustered index: CLUSTER reorders the heap once but doesn't maintain it. Non-clustered index is a separate structure with row pointers — lookup needs an extra table fetch unless it's a covering index.
 
 When would you use a partial (filtered) index? ; When you mostly query a subset of rows (e.g., `WHERE status = 'active'`). The index only stores matching rows — smaller, faster to maintain. Supported in PostgreSQL and SQL Server.
 
@@ -122,7 +122,7 @@ What is parameter sniffing? ; The DB caches a plan based on the first parameter 
 
 ## Ch 2 — Index Maintenance
 
-When is a full table scan actually faster than using an index? ; When the query returns a large percentage of rows (>15-30%). The optimizer correctly chooses a full scan over index lookups + random I/O for each matched row. Not a bug — check EXPLAIN to confirm.
+When is a full table scan actually faster than using an index? ; When the optimizer estimates that sequential I/O (full scan) is cheaper than index lookup + random I/O per matched row. This depends on table size, storage type, buffer cache, and data distribution — there's no fixed percentage. Use EXPLAIN (ANALYZE, BUFFERS) in PostgreSQL or EXPLAIN in MySQL to confirm the optimizer's choice.
 
 Why does `WHERE phone = 5551234` fail to use an index on a VARCHAR column? ; Implicit type cast — comparing VARCHAR to INT converts every row's value, preventing index use. Fix: `WHERE phone = '5551234'` (explicit string literal).
 

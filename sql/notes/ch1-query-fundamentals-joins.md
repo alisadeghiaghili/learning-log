@@ -218,7 +218,7 @@ WHERE c.id IN (
 | Performance | Better when subquery is indexed | Better when subquery is small and finite |
 | DB dependency | Works the same everywhere | `IN` with NULLs behaves differently across DBs |
 
-**Interview tip:** Always prefer `EXISTS` over `IN` with subqueries — it's safer with NULLs and often faster.
+**Interview tip:** Always prefer NOT EXISTS over NOT IN when the subquery column is nullable — NULL in the list silently eliminates all rows. For positive IN vs EXISTS, modern optimizers (PG 12+, MySQL 8+) often generate equivalent semi-join plans. Measure with EXPLAIN.
 
 ---
 
@@ -369,9 +369,9 @@ HAVING COUNT(*) > 1;
 | What | Removes specific rows | Removes all rows | Removes table + schema |
 | WHERE | Yes | No | No |
 | Log | Row-by-row (slow) | Minimal (fast) | Minimal |
-| Triggers | Fires | Doesn't fire | Doesn't fire |
-| Identity reset | No | Yes | N/A |
-| Rollback | Yes | DB-dependent | DB-dependent |
+| Triggers | Row-level triggers fire | Row-level triggers don't fire; statement-level triggers fire in PostgreSQL | N/A |
+| Rollback | Yes (fully logged) | Yes in PG/SQL Server; not in MySQL by default | DB-dependent |
+| Identity reset | No | Yes in SQL Server/MySQL; use RESTART IDENTITY in PG | N/A |
 
 **Q: Explain the "no direct access to aggregation results in WHERE" rule. Give the workaround.**
 A: Aggregates are computed after WHERE. Workaround: use a subquery/CTE to pre-aggregate, then filter the result.
@@ -394,7 +394,7 @@ A: Generating all combinations — calendar × hours for scheduling, users × fe
 
 1. SQL execution order is not what you read — understand the logical pipeline
 2. NULLs break equality — use `IS NULL`, never `= NULL`; avoid `NOT IN` with nullable columns
-3. EXISTS > IN for subqueries (NULL-safe, often faster)
+3. Use NOT EXISTS over NOT IN (NULL trap); IN vs EXISTS is optimizer-dependent — check EXPLAIN
 4. JOIN algorithms (nested loop, hash, merge) — know when each is used
 5. UNION ALL over UNION unless you need dedup
 6. `SELECT *` is an antipattern in production — always specify columns

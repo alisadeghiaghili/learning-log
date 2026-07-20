@@ -60,6 +60,10 @@ Each node contains keys and pointers. Leaf nodes store the indexed column values
 ### Primary Key Index
 - Unique, not null, clustered in InnoDB (MySQL) — data is physically ordered by PK
 - Every InnoDB table has exactly one clustered index (the PK by default)
+- PostgreSQL has no true clustered index — `CLUSTER` is a one-time reorg, not maintained
+- SQL Server clustered index is logically ordered (B-tree), not a flat sequential file
+
+> ⚠️ Dialect note: Clustered indexes work differently per DB. MySQL/InnoDB: PK is always the clustered index, rows stored in B-tree order. SQL Server: one clustered index per table, logically ordered. PostgreSQL: no persistent clustered index — `CLUSTER` is a one-time heap reorder that future writes do not maintain.
 
 ### Unique Index
 - Enforces uniqueness + speeds up lookups
@@ -115,7 +119,7 @@ CREATE INDEX idx_cover ON orders(customer_id, order_date);
 1. **Leading wildcard:** `LIKE '%term'` — B-tree is sorted, can't skip to the middle
 2. **Function on indexed column:** `WHERE YEAR(created_at) = 2024` — create a functional index instead
 3. **Type mismatch / implicit cast:** `WHERE phone = 5551234` when phone is VARCHAR — the cast prevents index use
-4. **High selectivity filter:** `WHERE gender = 'M'` on a table that's 50% male — full scan is faster than index + 50% of rows
+4. **High selectivity filter:** `WHERE gender = 'M'` on a table that's 50% male — the optimizer picks a full scan when sequential I/O is cheaper than index lookup + random I/O per matched row. No fixed percentage threshold (depends on buffer cache, storage, table size).
 5. **OR across different indexes:** `WHERE a = 1 OR b = 2` — DB may scan both indexes and merge, or just full scan (optimizer decides)
 6. **NOT NULL / NOT IN:** `WHERE status != 'deleted'` often matches most rows — full scan wins
 
@@ -318,7 +322,7 @@ Databases cache execution plans. With parameterized queries, the first parameter
 ## 10. Interview Q&A
 
 **Q: What's the difference between a clustered and non-clustered index?**
-A: A **clustered index** determines the physical row order on disk (only one per table, usually the PK). A **non-clustered index** is a separate structure with pointers to the rows. A non-clustered lookup requires an extra step to fetch the full row (unless it's a covering index).
+A: A **clustered index** controls data row ordering — in MySQL/InnoDB and SQL Server, one per table (usually PK). PostgreSQL has no persistent clustered index: `CLUSTER` reorders the heap once but doesn't maintain it. A **non-clustered index** is a separate structure with row pointers — lookup needs an extra table fetch unless it's a covering index.
 
 **Q: Why would you use a composite index instead of two single-column indexes?**
 A: 1) A composite index can satisfy queries that filter on multiple columns simultaneously — two separate indexes require merging. 2) A composite index can serve as a covering index. 3) Fewer indexes = fewer write overhead. Rule: composite when columns are often queried together, single when queried independently.
@@ -327,7 +331,7 @@ A: 1) A composite index can satisfy queries that filter on multiple columns simu
 A: A composite index `(a, b, c)` can be used for queries on `a`, `a+b`, or `a+b+c` — but NOT for `b`, `c`, or `b+c` alone. The index is sorted by `a` first, then `b` within `a`, then `c` within `b`. Skipping `a` means there's no sorted order to exploit.
 
 **Q: When would the optimizer ignore your index?**
-A: Leading wildcard `LIKE '%x'`, function on column, implicit type cast, low selectivity (returns >~15-30% of rows), or stale statistics. Also when OR spans different indexed columns without a UNION rewrite.
+A: Leading wildcard `LIKE '%x'`, function on column, implicit type cast, when the optimizer estimates index lookups + random I/O costs more than a sequential full scan (depends on table size, cache hit rate, storage type — measure with `EXPLAIN ANALYZE`), or stale statistics. Also when OR spans different indexed columns without a UNION rewrite.
 
 **Q: How do you read EXPLAIN output? (MySQL)**
 A: Check `type` (access path — `ALL` = full scan, `ref`/`range` = index used), `key` (which index), `rows` (estimated work), and `Extra` (`Using index` = covering, `Using filesort`/`Using temporary` = potential optimization targets).
