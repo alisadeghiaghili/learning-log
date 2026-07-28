@@ -26,7 +26,7 @@ Chapter notes for AI Engineer learning journey — Python basics to advanced, OO
 
 | # | Chapter | Books | Roadmap | Status |
 | -- | ------- | ----- | ------- | ------ |
-| 1 | [Python Basics & Environment](ch1-python-basics-environment.md) | F1, E1–4, CC2–3, PC1 | Basic Python | 🟢 Done |
+| 1 | [Python Basics & Environment](W1-summary.md) | F1, E1–4, CC2–3, PC1 | Basic Python | 🟢 Done |
 | 2 | Sequences, Lists, Tuples & Slicing | F2–3, PC1 | Basic Python: Collections | 🔜 |
 | 3 | Dicts, Sets & Mapping Structures | F4–5, PC2 | Basic Python: Collections | 🔜 |
 | 4 | Strings, Bytes & Text Processing | F7–9, E3 | Basic Python: String Manipulation | 🔜 |
