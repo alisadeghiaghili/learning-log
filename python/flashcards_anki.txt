@@ -1,3 +1,4 @@
+
 # Python Flashcards — EN (Anki Import)
 
 Q:: Pythonic file open?
@@ -164,3 +165,4 @@ A:: FIFO: deque O(1) popleft. list O(n) pop(0). Thread-safe: `queue.Queue`.
 --
 Q:: Rolling window with zip?
 A:: `list(zip(*(seq[i:] for i in range(n))))` — n-length sliding tuples.
+

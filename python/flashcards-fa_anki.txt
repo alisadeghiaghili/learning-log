@@ -1,4 +1,10 @@
-# Python Flashcards — FA (Anki Import)
+#separator:tab
+#html:true
+#notetype:Basic
+#deck:Python فارسی::Python Fundamentals
+#tags column:3
+#columns:Front	Back	Tags
+
 
 Q:: روش پایتونیک باز کردن فایل؟
 A:: `with open(path) as fh:`
@@ -164,3 +170,4 @@ A:: FIFO: deque O(1) popleft. list O(n) pop(0). thread-safe: `queue.Queue`.
 --
 Q:: rolling window با zip؟
 A:: `list(zip(*(seq[i:] for i in range(n))))` — تاپل‌های لغزنده nتایی.
+
