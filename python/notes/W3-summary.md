@@ -526,7 +526,7 @@ Python dict is a **hash table**:
 2. Table index = hash & mask (mask = table size - 1)
 3. If slot empty → store (key, value) pair
 4. If slot occupied → **open addressing**: probe next slot
-5. Load factor ≈ 2/3 → resize when exceeded
+5. Load factor ~ 2/3 → resize when exceeded
 
 > **Source**: [CPython Objects/dictobject.c](https://github.com/python/cpython/blob/main/Objects/dictobject.c) — `lookdict()` function and `USABLE_FRACTION` macro. Also see Raymond Hettinger's [python-dev post](https://mail.python.org/pipermail/python-dev/2012-December/123028.html) on dict implementation.
 

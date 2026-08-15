@@ -86,7 +86,7 @@ s.encode("ascii", errors="backslashreplace")  # b'h\\xe9llo' — escape
 # Decoding side
 b = b"\xff\xfe"
 b.decode("utf-8")                     # UnicodeDecodeError
-b.decode("utf-8", errors="replace")   # '��' — � replacement char
+b.decode("utf-8", errors="replace")   # 'U+FFFD' — replacement char (U+FFFD)
 b.decode("utf-8", errors="ignore")    # '' — drop invalid
 ```
 
@@ -160,11 +160,11 @@ b"\xef\xbb\xbf".decode("utf-8")  # '﻿'
 from unicodedata import normalize, combining, name
 
 n1 = "café"        # "café" — precomposed é (U+00E9)
-n2 = "café"       # "café" — e + combining accent (U+0301)
+n2 = "café"       # "café" — e + combining accent (U+0301)
 
 n1 == n2                          # False — different code points
 normalize("NFC", n2) == n1        # True — NFC composes
-normalize("NFD", n1)              # decomposes: "café"
+normalize("NFD", n1)              # decomposes: "café"
 len(normalize("NFD", "café"))     # 5 (c,a,f,e,´)
 
 # Forms
@@ -397,7 +397,7 @@ def clean_text(s):
     s = " ".join(s.split())                    # collapse whitespace
     return s
 
-clean_text("café — 你好")      # "cafe  " (— dropped, CJK dropped)
+clean_text("cafe — test")      # "cafe  test" (— dropped, extra spaces collapsed)
 
 # Keep only allowed chars
 import re

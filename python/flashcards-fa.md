@@ -276,7 +276,7 @@ Q: چطور بین `str` و `bytes` تبدیل انجام بدیم؟
 A: `s.encode("utf-8")` → بایت (در مرز I/O). `b.decode("utf-8")` → رشته. هیچ‌وقت با `+` یا `==` ترکیبشون نکن — `TypeError`.
 
 Q: وقتی `"é".encode("ascii")` چی می‌شه؟
-A: `UnicodeEncodeError` — é در ASCII نیست. از `errors="replace"`، `"ignore"` یا `"backslashreplace"` استفاده کن. برای decode: `b.decode("utf-8", errors="replace")` کاراکتر � جایگزین می‌کنه.
+A: `UnicodeEncodeError` — é در ASCII نیست. از `errors="replace"`، `"ignore"` یا `"backslashreplace"` استفاده کن. برای decode: `b.decode("utf-8", errors="replace")` کاراکتر جایگزین (U+FFFD) قرار می‌کنه.
 
 Q: کد پوینت چیه و `ord()`/`chr()` چطور کار می‌کنن؟
 A: کد پوینت = عدد صحیح شناسایی یک کاراکتر یونیکد. `ord("A")` → ۶۵، `chr(65)` → `"A"`. طول بایت کد پوینت به encoding بستگی داره — "é" در UTF-8 دو بایت، در UTF-16 دو بایت، در UTF-32 چهار بایت.
@@ -284,7 +284,7 @@ A: کد پوینت = عدد صحیح شناسایی یک کاراکتر یونی
 Q: فرق UTF-8 و UTF-16 چیه؟
 A: UTF-8: ۱ تا ۴ بایت، سازگار با ASCII، استاندارد وب. UTF-16: ۲ تا ۴ بایت، نیاز به BOM برای تشخیص byte order، قدیمی. UTF-32: ثابت ۴ بایت، پرهزینه.
 
-Q: چرا `"café" == "café"` برابر False هست و چطور حلش کنیم؟
+Q: چرا `"café" == "café"` برابر False هست و چطور حلش کنیم؟
 A: متن یکسان ولی کد پوینت‌های متفاوت (é آماده vs e + اکسنت ترکیبی). راه‌حل: `unicodedata.normalize("NFC", s)` — به شکل ترکیبی نرمال می‌کنه. `NFD` تجزیه می‌کنه.
 
 Q: کی به جای `lower()` از `casefold()` استفاده کنیم؟

@@ -279,7 +279,7 @@ Q: How do you convert between `str` and `bytes`?
 A: `s.encode("utf-8")` → bytes (str → bytes at the I/O edge). `b.decode("utf-8")` → str. Never mix them with `+` or `==` — TypeError.
 
 Q: What happens on `"é".encode("ascii")`?
-A: `UnicodeEncodeError` — é not in ASCII. Use `errors="replace"`, `"ignore"`, or `"backslashreplace"`. For decoding, `b.decode("utf-8", errors="replace")` substitutes the � char.
+A: `UnicodeEncodeError` — é not in ASCII. Use `errors="replace"`, `"ignore"`, or `"backslashreplace"`. For decoding, `b.decode("utf-8", errors="replace")` substitutes U+FFFD (replacement char).
 
 Q: What is a code point and how do `ord()` / `chr()` work?
 A: Code point = integer identifying a Unicode char. `ord("A")` → 65, `chr(65)` → "A". A code point's byte length depends on encoding — "é" is 2 bytes in UTF-8, 2 in UTF-16, 4 in UTF-32.
@@ -287,7 +287,7 @@ A: Code point = integer identifying a Unicode char. `ord("A")` → 65, `chr(65)`
 Q: What's the difference between UTF-8 and UTF-16?
 A: UTF-8: 1–4 bytes, ASCII-compatible, web default. UTF-16: 2–4 bytes, needs BOM to signal byte order, legacy on Windows/Java. UTF-32: fixed 4 bytes, wasteful. [Source: Unicode Standard, Section 3.9]
 
-Q: Why does `"café" == "café"` evaluate to False, and how do you fix it?
+Q: Why does `"café" == "café"` evaluate to False, and how do you fix it?
 A: Same visual text, different code points (precomposed é vs e + combining accent). Fix with `unicodedata.normalize("NFC", s)` — composes canonically. `NFD` decomposes. [Source: unicode.org/reports/tr15]
 
 Q: When should you use `casefold()` instead of `lower()`?
