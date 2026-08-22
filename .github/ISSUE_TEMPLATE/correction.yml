@@ -1,0 +1,25 @@
+name: نقد یا تصحیح
+description: چیزی اینجا اشتباه یا ناقص است
+title: "[نقد]: "
+labels: ["correction"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: کجا؟
+      description: مسیر فایل یا لینک به بخش موردنظر
+      placeholder: notes/econometrics/demand-estimation.md
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: چه چیزی اشتباه است؟
+      description: ادعای فعلی را نقل کن و بگو چرا نادرست/ناقص است
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: شواهد یا منبع
+      description: مقاله، داکیومنت، یا استدلال. اختیاری ولی توصیه‌شده
