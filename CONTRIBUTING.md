@@ -2,7 +2,7 @@
 
 Thank you for considering a contribution — whether it's one flashcard, a typo fix, or a brand-new topic folder, it's genuinely welcome here. 🎉
 
-از مشارکت شما در این ریپو خوشحال می‌شویم؛ فرقی نمی‌کند مشارکت شما یک فلش‌کارت باشد یا اصلاح یک غلط تایپی یا افزودن یک موضوع جدید — همه‌ی این‌ها ارزشمند هستند.
+از اینکه برای مشارکت در این مخزن وقت می‌گذارید ممنونم. فرقی نمی‌کند یک فلش‌کارت اضافه کنید، اشتباه کوچکی را اصلاح کنید یا موضوع تازه‌ای پیشنهاد دهید؛ هر مشارکت مفیدی به بهتر شدن این منبع یادگیری کمک می‌کند.
 
 ## Ground rules
 
@@ -22,7 +22,7 @@ Thank you for considering a contribution — whether it's one flashcard, a typo 
 4. Commit with a clear message (e.g. `Add flashcards on gradient clipping to deep-learning`).
 5. Open a **pull request** describing what you added or changed and why.
 
-No contribution is too small — fixing one typo or adding one card is a perfectly good PR.
+لازم نیست تغییرتان بزرگ باشد. اصلاح یک غلط تایپی یا افزودن یک فلش‌کارت باکیفیت هم یک Pull Request کاملاً ارزشمند است.
 
 ## Adding flashcards
 

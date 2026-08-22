@@ -7,7 +7,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Language: FA/EN](https://img.shields.io/badge/lang-فارسی%20%7C%20English-orange)](#)
 
-این مخزن، دفترچه یادگیری زنده‌ی من است: یادداشت‌های عمیق، فلش‌کارت‌ها (به فارسی و انگلیسی)، ردیابی پیشرفت و منابع مرجع برای موضوعاتی که در حال یادگیری یا مرور آن‌ها هستم. هدف، رسیدن به تسلطی در سطح مصاحبه‌های تخصصی (interview-grade mastery) است — نه صرفاً خواندن یک‌بار و فراموش کردن.
+این مخزن، یادداشت‌نامه‌ی در حال رشد من برای یادگیری است: مجموعه‌ای از یادداشت‌های عمیق، فلش‌کارت‌های فارسی و انگلیسی، گزارش پیشرفت و منابع پیشنهادی برای موضوعاتی که مطالعه یا مرور می‌کنم. هدف فقط خواندن و گذر کردن نیست؛ می‌خواهم مفاهیم را آن‌قدر خوب یاد بگیرم که بتوانم در مصاحبه‌های تخصصی و پروژه‌های واقعی با اطمینان از آن‌ها استفاده کنم.
 
 This repo is my living learning notebook: deep-dive notes, bilingual (Persian/English) flashcards, progress tracking, and curated references for topics I'm actively studying or reviewing — aimed at interview-grade mastery, not one-time reading.
 
@@ -58,7 +58,7 @@ Flashcard exports (`*_anki.txt`) are generated automatically by GitHub Actions a
 
 ## 🤝 Contributing
 
-**این ریپو برای مشارکت باز است!** اگر شما هم در حال یادگیری همین موضوعات (یا موضوعات مشابه) هستید، مشارکت‌تان بسیار خوش‌آمد است — چه یک فلش‌کارت جدید باشد، چه اصلاح یک یادداشت، چه افزودن یک موضوع کاملاً تازه.
+**این مخزن برای مشارکت همه باز است.** اگر روی این موضوعات یا حوزه‌های نزدیک به آن‌ها مطالعه می‌کنید، خوشحال می‌شوم نتیجه‌ی یادگیری‌تان را با دیگران به اشتراک بگذارید. لازم نیست مشارکت بزرگی داشته باشید؛ اضافه کردن یک فلش‌کارت دقیق، اصلاح یک اشتباه کوچک یا معرفی یک منبع خوب هم بسیار ارزشمند است.
 
 **Contributions are genuinely welcome — this is meant to grow as a community learning resource, not stay a solo notebook.**
 
@@ -73,7 +73,7 @@ Ways to contribute:
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide on card format, folder conventions, and the PR process before opening a pull request. Even a single well-written flashcard is a valid, appreciated contribution.
 
-راهنمای کامل قالب فلش‌کارت‌ها و فرآیند ارسال Pull Request در فایل [CONTRIBUTING.md](CONTRIBUTING.md) آمده است. حتی یک فلش‌کارت خوب هم مشارکتی ارزشمند محسوب می‌شود — نگران "بزرگ بودن" مشارکتتان نباشید.
+پیش از باز کردن Pull Request، لطفاً راهنمای [CONTRIBUTING.md](CONTRIBUTING.md) را بخوانید. در آن، قالب فلش‌کارت‌ها، ساختار پوشه‌ها و روند ارسال تغییرات توضیح داده شده است. یک فلش‌کارت خوب هم می‌تواند شروع یک همکاری مفید باشد؛ منتظر نمانید تا تغییرتان خیلی بزرگ شود.
 
 ### Good first issues
 
