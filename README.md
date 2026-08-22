@@ -7,7 +7,8 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Language: FA/EN](https://img.shields.io/badge/lang-فارسی%20%7C%20English-orange)](#)
 
-ین مخزن، حافظه‌ی بیرونی من برای یادگیری و مرور است: یادداشت‌های عمیق، فلش‌کارت فارسی/انگلیسی، گزارش پیشرفت و منابع، برای هر موضوعی که مطالعه می‌کنم. هدف، تسلطی است که در مصاحبه‌ی تخصصی و پروژه‌ی واقعی به کار بیاید — نه خواندن و رد شدن. عمومی‌اش کردم چون یادگیری در فضای باز، هم مرا منظم نگه می‌دارد و هم شاید به کار کسی بیاید که همین مسیر را می‌رود. نقد و اصلاح هم پذیرفته است: اگر جایی اشتباه نوشته‌ام، Issue باز کنید.
+این مخزن، حافظه‌ی بیرونی من برای یادگیری و مرور است: یادداشت‌های عمیق، فلش‌کارت فارسی/انگلیسی، گزارش پیشرفت و منابع، برای هر موضوعی که مطالعه می‌کنم. هدف، تسلطی است که در مصاحبه‌ی تخصصی و پروژه‌ی واقعی به کار بیاید — نه خواندن و رد شدن. عمومی‌اش کردم چون یادگیری در فضای باز، هم
+مرا منظم نگه می‌دارد و هم شاید به کار کسی بیاید که همین مسیر را می‌رود. نقد و اصلاح هم پذیرفته است: اگر جایی اشتباه نوشته‌ام، Issue باز کنید.
 
 This repo is my living learning notebook: deep-dive notes, bilingual (Persian/English) flashcards, progress tracking, and curated references for topics I'm actively studying or reviewing — aimed at interview-grade mastery, not one-time reading.
 
