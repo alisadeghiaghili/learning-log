@@ -1,0 +1,11 @@
+name: سؤال یا پیشنهاد موضوع
+description: می‌خواهی چیزی بپرسی یا موضوعی برای بررسی پیشنهاد بدهی
+title: "[سؤال]: "
+labels: ["question"]
+body:
+  - type: textarea
+    id: body
+    attributes:
+      label: سؤال یا پیشنهاد
+    validations:
+      required: true
