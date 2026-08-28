@@ -368,3 +368,160 @@ A: Functions are objects: assignable (`g = f`), passable as args (`apply(f, x)`)
 
 Q: What's the recursion limit and why does it matter?
 A: Default ~1000 (`sys.getrecursionlimit()`). Exceeding it raises `RecursionError`. Always have a base case; prefer iteration for deep recursion.
+
+## Ch 6: Comprehensions, Lambda & Functional Tools
+
+Q: What's the syntax for a list comprehension?
+A: `[expr for item in iterable if condition]`
+
+Q: How to flatten a 2D list with a list comprehension?
+A: `[x for row in matrix for x in row]` — outer loop first, inner loop second.
+
+Q: What's a dict comprehension?
+A: `{key_expr: value_expr for item in iterable if condition}` — e.g., `{w: len(w) for w in words}`
+
+Q: What's a set comprehension?
+A: `{expr for item in iterable if condition}` — e.g., `{len(w) for w in words}` gives unique lengths.
+
+Q: Difference between list comprehension and generator expression?
+A: List comprehension creates full list in memory. Generator expression (`(...)`) yields lazily — memory efficient for large sequences.
+
+Q: When to use generator expression vs list comprehension?
+A: Generator for large/infinite sequences, chaining, memory-constrained. List for small data, need random access/len/indexing.
+
+Q: How to sum squares using a generator expression?
+A: `sum(x**2 for x in range(10))` — no extra brackets needed as sole argument.
+
+Q: What's the lambda syntax?
+A: `lambda args: expression` — single expression only, no statements.
+
+Q: Lambda with default arguments?
+A: `lambda a, b=2: a * b` — defaults evaluated at definition time.
+
+Q: Common lambda use case?
+A: `key=` functions: `sorted(items, key=lambda x: x[1])` or `map`/`filter` callbacks.
+
+Q: Late-binding gotcha with lambdas in loops?
+A: `funcs = [lambda: i for i in range(3)]` → all return 2. Fix: `lambda i=i: i` binds value as default.
+
+Q: When to prefer `def` over `lambda`?
+A: Named function needed, multiple statements, recursion, docstring/type hints, readability.
+
+Q: What does `map(func, iterable)` do?
+A: Returns iterator applying func to each item: `list(map(str.upper, ["a", "b"]))` → `["A", "B"]`.
+
+Q: What does `filter(func, iterable)` do?
+A: Returns iterator of items where func is truthy: `list(filter(lambda x: x>5, range(10)))` → `[6,7,8,9]`.
+
+Q: What does `functools.reduce(func, iterable)` do?
+A: Cumulatively applies binary function: `reduce(lambda a,b: a+b, [1,2,3])` → 6. With initializer: `reduce(add, [], 0)` → 0.
+
+Q: What's `functools.partial` for?
+A: Fix some arguments of a function: `square = partial(pow, exp=2)` → `square(5)` = 25.
+
+Q: What does `itertools.count` do?
+A: Infinite counter: `zip(count(), ['a','b'])` → `[(0,'a'), (1,'b')]`.
+
+Q: What does `itertools.cycle` do?
+A: Infinite repetition: `islice(cycle([1,2]), 5)` → `[1,2,1,2,1]`.
+
+Q: What does `itertools.islice` do?
+A: Slice an iterator: `islice(range(100), 5, 15)` → `[5..14]` without creating full list.
+
+Q: What does `itertools.chain` do?
+A: Concatenate iterables: `chain([1,2], [3,4])` → `[1,2,3,4]`. `chain.from_iterable(matrix)` flattens.
+
+Q: Difference between `product`, `permutations`, `combinations`?
+A: `product` = Cartesian product (ordered, with replacement). `permutations` = ordered, no replacement. `combinations` = unordered, no replacement.
+
+Q: What does `itertools.groupby` require?
+A: Input must be pre-sorted by the grouping key. Groups consecutive items with same key.
+
+Q: What does `operator.itemgetter` do?
+A: Returns callable extracting item by index/key: `itemgetter(1)(["a","b"])` → `"b"`. Often clearer than a lambda for simple extraction.
+
+Q: What does `operator.attrgetter` do?
+A: Extracts attribute: `attrgetter("age")(person)` → `person.age`. Use with `sorted(key=)`.
+
+Q: What does `operator.methodcaller` do?
+A: Calls method by name: `methodcaller("upper")("hi")` → `"HI"`. `methodcaller("replace"," ","-")("a b")` → `"a-b"`.
+
+Q: How to group by key using dict comprehension?
+A: `{k: [v for k2,v in data if k2==k] for k in set(k for k,_ in data)}` — inefficient for large data.
+
+Q: Better way to group — use `itertools.groupby`?
+A: Sort first, then `{k: [v for _,v in g] for k,g in groupby(sorted_data, key=lambda x: x[0])}`.
+
+Q: What's the `operator` module arithmetic functions?
+A: `add(a,b)`, `mul(a,b)`, `sub(a,b)`, `truediv(a,b)` — use with `reduce`: `reduce(add, [1,2,3])` → 6.
+
+## Ch 7: Modules, Packages & Import System
+
+Q: What's the difference between a module and a package?
+A: Module = single .py file. Package = directory with __init__.py (or PEP 420 namespace package) containing modules/subpackages. [Source: docs.python.org/3/tutorial/modules.html]
+
+Q: When does __init__.py run?
+A: When the package is initially imported. Later submodule imports do NOT re-execute it while the package remains cached in sys.modules. [Source: docs.python.org/3/reference/import.html#regular-packages]
+
+Q: What does __all__ do in __init__.py?
+A: Primarily controls `from package import *` (star-import) behavior — lists which names it exports. It does NOT enforce a public API or prevent direct imports of other names. [Source: docs.python.org/3/tutorial/modules.html#importing-from-a-package]
+
+Q: Absolute vs relative imports — which to prefer?
+A: Absolute imports (PEP 8) — unambiguous, work everywhere. Relative imports require package context (`__package__`), not merely being inside a package; a module run as a file (`python path/to/module.py`) lacks it — use `python -m package.module` instead. [Source: PEP 8 — Imports]
+
+Q: Relative import syntax?
+A: `from . import module` (same package), `from .. import module` (parent package), `from ..sub import func`. Run with `python -m package.module` so relative imports resolve. [Source: PEP 328]
+
+Q: What is a namespace package (PEP 420)?
+A: Package WITHOUT __init__.py — multiple directories merge into one namespace. Used for plugins, split distributions. [Source: PEP 420]
+
+Q: How to dynamically import a module by string name?
+A: `importlib.import_module("json")` or `importlib.import_module(".module_a", package="mypackage")` for relative. [Source: docs.python.org/3/library/importlib.html#importlib.import_module]
+
+Q: How to reload a module after editing?
+A: `importlib.reload(module)` — re-executes the module in its existing namespace. It does NOT refresh names already imported via `from module import name` or references held by existing instances. [Source: docs.python.org/3/library/importlib.html#importlib.reload]
+
+Q: How to load a module from a file path?
+A: `spec = importlib.util.spec_from_file_location("name", "/path/to/file.py"); module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)` [Source: docs.python.org/3/library/importlib.html#importlib.util.spec_from_file_location]
+
+Q: How to read a data file bundled with a package?
+A: `importlib.resources.files("pkg.data").joinpath("file.json").read_text()` (Python 3.9+). Binary: `.read_bytes()`. [Source: docs.python.org/3/library/importlib.resources.html]
+
+Q: What does pkgutil.get_data() do?
+A: Legacy way to read package data as bytes: `pkgutil.get_data("mypackage", "data/config.json")`. [Source: docs.python.org/3/library/pkgutil.html#pkgutil.get_data]
+
+Q: What does runpy.run_module() do?
+A: Runs a module as __main__ (like `python -m module`). `runpy.run_module("mymodule", run_name="__main__")`. [Source: docs.python.org/3/library/runpy.html]
+
+Q: How does Python find modules?
+A: Searches `sys.path`, whose contents vary by invocation mode, interpreter config, site initialization, .pth files, and isolated mode. Common contributors: script/`-m` directory, PYTHONPATH, standard library, site-packages. Inspect `sys.path` in the active interpreter. [Source: docs.python.org/3/library/sys.html#sys.path]
+
+Q: How to add a directory to module search path at runtime?
+A: `sys.path.insert(0, "/custom/path")` — but prefer virtual env + `pip install -e .` instead. [Source: docs.python.org/3/library/sys.html#sys.path]
+
+Q: What's the `if __name__ == "__main__"` pattern?
+A: Code under this block only runs when file executed directly (`python file.py`), not when imported. [Source: docs.python.org/3/library/__main__.html]
+
+Q: What causes circular imports and how to fix?
+A: Module A imports B, B imports A. Primary fix: redesign the dependency graph. Lazy (function-level) imports are a tactical option; type-only imports can use `typing.TYPE_CHECKING`. `importlib` is not a general fix. [Source: docs.python.org/3/faq/programming.html#what-are-the-best-practices-for-using-import-in-a-module]
+
+Q: What's the src/ layout for packages?
+A: Package code in `src/mypackage/` — avoids accidental imports from working dir, matches installed structure. [Source: packaging.python.org/en/latest/tutorials/packaging-projects]
+
+Q: What's pyproject.toml for?
+A: Modern packaging config (PEP 517/518/621). Defines build-system, project metadata, dependencies, optional deps. [Source: PEP 621]
+
+Q: How to install package in editable mode?
+A: `pip install -e .` — an editable install exposes source changes without a normal reinstall. The mechanism (symlink vs .pth) depends on the installer and build backend. [Source: PEP 660]
+
+Q: What's a conditional import?
+A: `try: import ujson as json except ImportError: import json` — optional dependency with fallback. [Source: PEP 8]
+
+Q: What does leading underscore mean in module names?
+A: `_private` — convention for internal use. Not imported by `from module import *` unless in __all__. [Source: PEP 8]
+
+Q: What's __package__ attribute?
+A: Package name of the module. Empty string for top-level scripts. Used by relative imports to resolve. [Source: docs.python.org/3/reference/import.html]
+
+Q: How to iterate modules in a package?
+A: `pkgutil.iter_modules(package.__path__)` — yields (importer, modname, ispkg) for each module. [Source: docs.python.org/3/library/pkgutil.html#pkgutil.iter_modules]
