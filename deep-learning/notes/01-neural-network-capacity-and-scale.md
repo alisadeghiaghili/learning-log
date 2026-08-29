@@ -139,7 +139,7 @@ Barron (1993) نیز برخلاف یک سوءبرداشت رایج، برای ک
 
 $$
 \mathbb{E}\left[(Y - \hat{f}(X))^2\right]
-= \operatorname{Bias}^2 + \operatorname{Variance} + \operatorname{Irreducible\ Noise}
+= \mathrm{Bias}^2 + \mathrm{Variance} + \mathrm{Irreducible\ Noise}
 $$
 
 <div dir="rtl" align="right">
@@ -306,11 +306,11 @@ $$
 </div>
 
 $$
-\operatorname{ReLU}(z) = \max(0,z)
+\mathrm{ReLU}(z) = \max(0,z)
 $$
 
 $$
-\frac{d}{dz}\operatorname{ReLU}(z) =
+\frac{d}{dz}\mathrm{ReLU}(z) =
 \begin{cases}
 1 & z > 0 \\
 0 & z < 0
@@ -336,7 +336,7 @@ $$
 </div>
 
 $$
-\operatorname{LeakyReLU}(z) =
+\mathrm{LeakyReLU}(z) =
 \begin{cases}
 z & z > 0 \\
 \alpha z & z \leq 0
@@ -359,7 +359,7 @@ ReLU در صفر مشتق کلاسیک ندارد. در convex analysis، مجم
 </div>
 
 $$
-W_{ij} \sim \mathcal{N}\left(0, \frac{2}{\operatorname{fan\_in}}\right)
+W_{ij} \sim \mathcal{N}\left(0, \frac{2}{\mathrm{fan\_in}}\right)
 $$
 
 <div dir="rtl" align="right">
